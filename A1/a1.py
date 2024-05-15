@@ -57,7 +57,7 @@ def bfs(arr, start_x, start_y, length_rows, length_cols):
             arr[current_x][current_y] = 'E'
             return current_x, current_y, arr, path_length
         else:
-            for dx, dy, direction in [(1, 0, 'v'), (-1, 0, '^'), (0, 1, '>'), (0, -1, '<')]:
+            for dx, dy, direction in [(1, 0, '.'), (-1, 0, '.'), (0, 1, '.'), (0, -1, '.')]:
                 new_x, new_y = current_x + dx, current_y + dy
                 if (new_x >= 0 and new_x < length_rows) and (new_y >= 0 and new_y < length_cols) and (arr[new_x][new_y] != 'X') and ((new_x, new_y) not in visited):
                     if (arr[new_x][new_y] != 'E'):

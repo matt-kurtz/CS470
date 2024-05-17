@@ -57,6 +57,12 @@ class PriorityQueue:
         self.counter += 1
         self.sort()
 
+    def greedy_enqueue(self, coords):
+        distance = abs(coords[0] - self.end[0]) + abs(coords[1] - self.end[1])
+        self.items.append((distance, self.counter, coords))
+        self.counter += 1
+        self.sort()
+
     def sort(self):
         self.items.sort()  # Sort based on distance and insertion order
     

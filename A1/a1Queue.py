@@ -26,18 +26,35 @@ class PriorityQueue:
 
 """
 class PriorityQueue:
-    def __init__(self, start_x, start_y):
+    def __init__(self, start_x, start_y, end_x=None, end_y=None):
         self.items = []
         self.start = (start_x, start_y)
+        self.end = (end_x, end_y)
         self.counter = 0  # Counter to maintain order of insertion
 
     def is_empty(self):
         return len(self.items) == 0
     
     def enqueue(self, coords):
-        distance = math.sqrt((coords[0] - self.start[0])**2 + (coords[1] - self.start[1])**2)
-        self.items.append((distance, self.counter, coords))
+        #distance = math.sqrt((coords[0] - self.start[0])**2 + (coords[1] - self.start[1])**2)
+        pl = coords[2]
+        self.items.append((pl, self.counter, coords))
         self.counter += 1  # Increment counter
+        self.sort()
+
+    # enqueuing using a*. Essentially the enqueue function above, but we add the distance to the path length as an heuristic
+    def enqueue_a(self, coords):
+        distance = math.sqrt((coords[0] - self.end[0])**2 + (coords[1] - self.end[1])**2)
+        pl = coords[2]
+        self.items.append((pl + distance, self.counter, coords))
+        self.counter += 1
+        self.sort()
+
+    def enqueue_b(self, coords):
+        distance = abs(coords[0] - self.end[0]) + abs(coords[1] - self.end[1])
+        pl = coords[2]
+        self.items.append((pl + distance, self.counter, coords))
+        self.counter += 1
         self.sort()
 
     def sort(self):

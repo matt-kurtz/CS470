@@ -28,6 +28,21 @@ def returnStart(arr):
                 return x, y
     return x, y
 
+def states_explored(arr):
+    count = 0
+    for row_id, row in enumerate(arr):
+        for col_id, col in enumerate(row):
+            if col == '.':
+                count += 1
+    return count
+
+def states_notexplored(arr):
+    count = 0
+    for row_id, row in enumerate(arr):
+        for col_id, col in enumerate(row):
+            if col == '0':
+                count += 1
+    return count
 def returnExit(arr):
     x = None
     y = None
@@ -302,6 +317,10 @@ if __name__ == "__main__":
     print("S is at", start_x, ",", start_y)
     x, y, arr, path_length = bfs(arr, start_x, start_y, length_rows, length_cols)
     print("Path length is:", path_length)
+    states_ex = states_explored(arr)
+    print("States explored:", states_ex)
+    states_nex = states_notexplored(arr)
+    print("States in open list:", states_nex)
     print("End coordinates are:", x, ",", y)
     printArray(arr)
 
@@ -314,6 +333,10 @@ if __name__ == "__main__":
     print("S is at", start_x, ",", start_y)
     x, y, arr, path_length = lowest_cost(arr, start_x, start_y, length_rows, length_cols)
     print("Path length is:", path_length)
+    states_ex = states_explored(arr)
+    print("States explored:", states_ex)
+    states_nex = states_notexplored(arr)
+    print("States in open list:", states_nex)
     printArray(arr)
     """
     print("LowestCost/PriorityQueue: ")
@@ -335,6 +358,10 @@ if __name__ == "__main__":
     print(f"Start is: {start_x}, {start_y}\nEnd is: {end_x}, {end_y}")
     x, y, arr, path_length = greedy_bestfirst(arr, start_x, start_y, end_x, end_y, length_rows, length_cols)
     print("Path length is:", path_length)
+    states_ex = states_explored(arr)
+    print("States explored:", states_ex)
+    states_nex = states_notexplored(arr)
+    print("States in open list:", states_nex)
     printArray(arr)
 
 
@@ -347,6 +374,10 @@ if __name__ == "__main__":
     print(f"Start is: {start_x}, {start_y}\nEnd is: {end_x}, {end_y}")
     x, y, arr, path_length = astar1(arr, start_x, start_y, end_x, end_y, length_rows, length_cols)
     print("Path length is:", path_length)
+    states_ex = states_explored(arr)
+    print("States explored:", states_ex)
+    states_nex = states_notexplored(arr)
+    print("States in open list:", states_nex)
     printArray(arr)
 
 
@@ -359,4 +390,8 @@ if __name__ == "__main__":
     print(f"Start is: {start_x}, {start_y}\nEnd is: {end_x}, {end_y}")
     x, y, arr, path_length = astar2(arr, start_x, start_y, end_x, end_y, length_rows, length_cols)
     print("Path length is:", path_length)
+    states_ex = states_explored(arr)
+    print("States explored:", states_ex)
+    states_nex = states_notexplored(arr)
+    print("States in open list:", states_nex)
     printArray(arr)

@@ -139,7 +139,16 @@ def main():
     rows, cols, board = create_board()
     print_board(board, cols)
     game_over = False
-    turn = 0
+    
+
+    while True:
+        first_player = input("Who goes first? Enter 'player' or 'bot': ")
+        if first_player in ['player', 'bot']:
+            break
+        else:
+            print("Please enter 'player' or 'bot' ")
+    
+    turn = 0 if first_player == 'player' else 1
 
     while not game_over:
         os.system('cls' if os.name == 'nt' else 'clear')

@@ -38,6 +38,7 @@ def player_move(arr, rows, cols, p_num):
             print("Invalid input. Please enter an integer")
 
 def evaluate_board(arr, rows, cols, player):
+    # This eval function essentially checks each "window" to see if there are 3 in a row. The more that there are, the the more the score goes up
     score = 0
     opponent = 'X' if player == '0' else '0'
     for row in range(rows):
@@ -81,12 +82,13 @@ def computer_move(arr, rows, cols, player):
     best_move = None
     best_score = float('-inf')
 
-
+    # Next, we'll go through the valid moves and call the minmax function
     for col in valid_moves:
         make_move(arr, rows, col, player)
 
         score = minmax(arr, 5, float('-inf'), float('inf'), False, rows, cols, player)
 
+        # Instead of creating a deep copy of every array, we'll just undo the move
         undo_move(arr, col)
 
         if score > best_score:
@@ -98,7 +100,9 @@ def computer_move(arr, rows, cols, player):
 
 
 def minmax(arr, depth, alpha, beta, maximizing_player, rows, cols, player):
+    # Make sure we don't run out of room
     valid_moves = validMoves(arr, cols)
+    #As we recursively go through this function, if we hit a win/loss/draw condition, return the appropriate value
     if checkWin(arr, rows, cols, '0'):
         return 100 if player == '0' else -100
     elif checkWin(arr, rows, cols, 'X'):
@@ -109,21 +113,43 @@ def minmax(arr, depth, alpha, beta, maximizing_player, rows, cols, player):
     if depth == 0:
         return evaluate_board(arr, rows, cols, player)
     
+
+    # Here's where we incorporate move ordering. We're getting the scores from the evaluation function and putting them into a list
+    move_scores = []
+    for col in valid_moves:
+        make_move(arr, rows, col, player)
+        score = evaluate_board(arr, rows, cols, player)
+        undo_move(arr, col)
+        move_scores.append((col, score))
+
+    # This is where we sort the list on whether if it's the maximizing player or not
     if maximizing_player:
+        move_scores.sort(key=lambda x: x[1], reverse=True)
+    else:
+        move_scores.sort(key=lambda x: x[1])
+
+
+    if maximizing_player:
+        # Here we start the minmax "magic"
+        # max_eval will be -inf
         max_eval = float('-inf')
-        for col in valid_moves:
+        # Here we sort through the moves in the move_scores that we calculated earlier
+        # We recursively go through the min max function getting all the possible scores until we reach our depth limit
+        for col, _ in move_scores:
             make_move(arr, rows, col, player)
             eval = minmax(arr, depth -1, alpha, beta, False, rows, cols, player)
             undo_move(arr, col)
             max_eval = max(max_eval, eval)
+            # Here's the alpha beta pruning
             alpha = max(alpha, eval)
             if beta <= alpha:
                 break
         return max_eval
     else:
+        # Same thing as above, except it's for the not maximizing player
         min_eval = float('inf')
         opponent = 'X' if player == '0' else '0'
-        for col in valid_moves:
+        for col, _ in move_scores:
             make_move(arr, rows, col, opponent)
             eval = minmax(arr, depth-1, alpha, beta, True, rows, cols, player)
             undo_move(arr, col)
@@ -140,7 +166,7 @@ def main():
     print_board(board, cols)
     game_over = False
     
-
+    # Player chooses who goes first
     while True:
         first_player = input("Who goes first? Enter 'player' or 'bot': ")
         if first_player in ['player', 'bot']:
@@ -150,7 +176,9 @@ def main():
     
     turn = 0 if first_player == 'player' else 1
 
+    # Where the game plays
     while not game_over:
+        # Clear the screen so it's "cleaner" for the user
         os.system('cls' if os.name == 'nt' else 'clear')
         print_board(board, cols)
         if turn % 2 == 0:
@@ -158,7 +186,7 @@ def main():
             if checkWin(board, rows, cols, '0'):
                 os.system('cls' if os.name == 'nt' else 'clear')
                 print_board(board, cols)
-                print("Player 1 wins!")
+                print("You win!")
                 game_over = True
         else:
             col = computer_move(board, rows, cols, 'X')
@@ -166,7 +194,7 @@ def main():
             if checkWin(board, rows, cols, 'X'):
                 os.system('cls' if os.name == 'nt' else 'clear')
                 print_board(board, cols)
-                print("Player 2 wins!")
+                print("The Bot wins!")
                 game_over = True
 
         if all(board[0][c] != '.' for c in range(cols)):

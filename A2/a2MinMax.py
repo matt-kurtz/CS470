@@ -76,9 +76,9 @@ def evaluate_board(arr, rows, cols, player):
 
 def computer_move(arr, rows, cols, player):
     # First, we need to make sure there are valid moves
-    print("We're in here")
+    #print("We're in here")
     valid_moves = validMoves(arr, cols)
-    print(valid_moves)
+    #print(valid_moves)
     best_move = None
     best_score = float('-inf')
 
@@ -163,7 +163,7 @@ def minmax(arr, depth, alpha, beta, maximizing_player, rows, cols, player):
 
 def main():
     rows, cols, board = create_board()
-    print_board(board, cols)
+    #print_board(board, cols)
     game_over = False
     
     # Player chooses who goes first
